@@ -9,7 +9,8 @@ interface RdsProps {
 }
 
 export class Rds extends Construct {
-  readonly vpc: ec2.Vpc;
+  readonly databaseInstance: rds.DatabaseInstance;
+  readonly rdsSecurityGroup: ec2.SecurityGroup;
 
   constructor(
     scope: Construct,
@@ -46,5 +47,7 @@ export class Rds extends Construct {
       databaseName: `hackathonSampleRDS${envName}`,
       credentials: rds.Credentials.fromGeneratedSecret("admin"), // SecretsManagerが自動生成される
     });
+    this.databaseInstance = databaseInstance;
+    this.rdsSecurityGroup = rdsSecurityGroup;
   }
 }
