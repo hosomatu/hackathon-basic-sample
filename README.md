@@ -3,4 +3,5 @@
 
 # tools
 nodejs 20.8.0
-
+npm 10.1.0
+aws-cdk 2.173.1
