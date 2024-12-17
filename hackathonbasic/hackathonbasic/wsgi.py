@@ -1,3 +1,4 @@
+# Webサーバー(WSGI)のエントリーポイント。Djangoに繋げる
 """
 WSGI config for hackathonbasic project.
 

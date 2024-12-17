@@ -1,3 +1,4 @@
+# 非同期サーバーと連携するために使用するファイル
 """
 ASGI config for hackathonbasic project.
 

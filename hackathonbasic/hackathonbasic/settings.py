@@ -1,3 +1,4 @@
+# プロジェクト全体の設定ファイル。DBの設定もここ
 """
 Django settings for hackathonbasic project.
 
