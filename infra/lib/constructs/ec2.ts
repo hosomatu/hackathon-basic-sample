@@ -8,7 +8,8 @@ interface Ec2Props {
 }
 
 export class Ec2 extends Construct {
-  readonly Instance: ec2.Instance;
+  readonly instance: ec2.Instance;
+  readonly securityGroup: ec2.SecurityGroup;
 
   constructor(scope: Construct, id: string, props: Ec2Props) {
     super(scope, id);
@@ -56,6 +57,7 @@ export class Ec2 extends Construct {
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
       },
     });
-    this.Instance = ec2Instance;
+    this.instance = ec2Instance;
+    this.securityGroup = ec2SecurityGroup;
   }
 }

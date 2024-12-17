@@ -4,6 +4,7 @@ import { StackParameter } from '../../parameter';
 import { Vpc } from '../constructs/vpc';
 import { Rds } from '../constructs/rds';
 import { Ec2 } from '../constructs/ec2';
+import { Alb } from '../constructs/alb';
 
 export class InfraStack extends cdk.Stack {
   constructor(
@@ -24,9 +25,13 @@ export class InfraStack extends cdk.Stack {
     // RDS
     const rds = new Rds(this, 'Rds', {vpc, envName});
     const rdsSecurityGroup = rds.rdsSecurityGroup;
-    const rdsInstance = rds.databaseInstance;
 
     // EC2
     const ec2 = new Ec2(this, 'EC2', {vpc, rdsSecurityGroup})
+    const ec2Instance = ec2.instance;
+    const ec2SecurityGroup = ec2.securityGroup;
+
+    // ALB
+    const alb = new Alb(this, 'Alb', {vpc, ec2Instance, ec2SecurityGroup});
   }
 }
