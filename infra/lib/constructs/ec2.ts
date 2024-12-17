@@ -1,5 +1,6 @@
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 interface Ec2Props {
   vpc: ec2.Vpc;
@@ -30,9 +31,22 @@ export class Ec2 extends Construct {
       "RDS to EC2"
     );
 
+    // Session Manager用のIAMロール
+    const ec2role = new iam.Role(this, "Ec2Role", {
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+    });
+    ec2role.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
+    );
+
+    vpc.addInterfaceEndpoint("SSMEndpoint", {
+      service: new ec2.InterfaceVpcEndpointAwsService("ssm"),
+    });
+
     // EC2インスタンス
     const ec2Instance = new ec2.Instance(this, "Instance", {
       vpc: vpc,
+      role: ec2role,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO), // t3.micro
       machineImage: new ec2.AmazonLinuxImage({
         generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2 // Amazon Linux 2
