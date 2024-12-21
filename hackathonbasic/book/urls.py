@@ -1,2 +1,7 @@
 # プロジェクト全体のurls.pyから指定されているファイル。
-urlpatterns = []
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('book/', views.ListBookView.as_view()),
+]
