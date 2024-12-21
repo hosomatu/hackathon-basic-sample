@@ -16,7 +16,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # プロジェクトが受け取るHTTPリクエストに対するリストを定義。
 # path()関数。第一引数がurlパス。第二引数がビュー関数など、マッチしたら呼び出されるもの。
