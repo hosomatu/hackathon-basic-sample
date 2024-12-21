@@ -10,7 +10,16 @@
 
     <title>{% block title %}{% endblock title %}| 本棚アプリ</title>
     </head>
-  <body>
+  <body style="text-align: left;">
+	<!-- As a link -->
+	<nav class="navbar navbar-dark bg-success sticky-top">
+		<div class="navbar-nav d-flex flex-row">
+			<a class="navbar-link mx-3" href="{% url 'list-book' %}">書籍一覧</a>
+			<a class="navbar-link mx-3" href="{% url 'create-book' %}">書籍登録</a>
+		</div>
+	</nav>
+	<div class='p-4'>
+		<h1>{% block h1 %}{% endblock %}</h1>
     {% block content %}{% endblock content %}
   </body>
 </html>
