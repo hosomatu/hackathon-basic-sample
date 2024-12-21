@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}書籍作成{% endblock %}
+
+{% block content %}
+    <form method='POST' style='text-align: left;'> {% csrf_token %}
+        {{form.as_p}}  <!-- モデルのフォーム情報に基づいた入力フォームがpタグに挟まる形になる -->
+        <input type='submit' value='作成する'>
+    </form>
+{% endblock content %}
