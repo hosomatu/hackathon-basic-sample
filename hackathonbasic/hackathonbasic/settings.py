@@ -1,4 +1,5 @@
 # プロジェクト全体の設定ファイル。DBの設定もここ
+# アプリの追加をしたときはここに追加していく。
 """
 Django settings for hackathonbasic project.
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'book.apps.BookConfig', # bookアプリをプロジェクト全体に認知させる
 ]
 
 MIDDLEWARE = [
@@ -52,10 +54,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'hackathonbasic.urls'
 
+# テンプレートエンジンに関する設定を行うリスト
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], # DIRSはテンプレートファイルを検索するディレクトリのリストを指定。BASE_DIRはsettings.pyにて、manage.pyがあるディレクトリと指定されている。Pythonのpathlibモジュールを使うことで、OSに依存しない方法でパスを構築している。BASE_DIR/templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
