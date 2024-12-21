@@ -30,3 +30,11 @@ class UpdateBookView(UpdateView) :
     fields = ('title', 'text', 'category' )
     template_name = 'book/book_update.html'
     success_url = reverse_lazy('list-book')
+
+def index_view(request) :
+    object_list = Book.objects.order_by('category')
+
+    # renderメソッド。テンプレートをレンダリングしてレスポンスオブジェクトを作る関数。
+    # 第一引数のrequestは現在のリクエストオブジェクトを指定。第二引数でテンプレートファイルを指定。
+    # 第三引数でテンプレートに渡すコンテキスト（辞書形式のデータ)先に定義したobject_list(右)を'object_list'(左)という名前で呼び出せるようにしている
+    return render(request, 'book/index.html', {'object_list': object_list})
