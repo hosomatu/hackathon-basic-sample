@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig', #accountsアプリをプロジェクト全体に認知させる
     'book.apps.BookConfig', # bookアプリをプロジェクト全体に認知させる
 ]
 

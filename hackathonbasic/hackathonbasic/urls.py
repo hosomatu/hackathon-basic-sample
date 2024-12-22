@@ -25,6 +25,6 @@ from django.urls import path, include
 # https://docs.djangoproject.com/ja/5.1/ref/urls/
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')), #djangoのビルトインの認証機能を使用する
+    path('accounts/', include('accounts.urls')), #認証機能appをこのプロジェクトに追加
     path('', include('book.urls')), # book/urls.py内で定義されたパスがこのプロジェクトに追加される。
 ]
