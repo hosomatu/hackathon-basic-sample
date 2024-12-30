@@ -1,5 +1,6 @@
 # Viewクラスを定義。表示するテンプレートと使用するモデルを定義
 # railsでいうコントローラー
+# urls.pyのpathメソッドの第二引数で指定されて、それぞれのクラスや関数が呼び出される
 
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy

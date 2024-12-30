@@ -1,3 +1,4 @@
+# モデル。テーブルの内容をクラスとして定義。
 from django.db import models
 from . consts import MAX_RATE
 
@@ -10,10 +11,10 @@ class Book(models.Model):
     text = models.TextField(max_length=255)
     category = models.TextField(
         max_length=100,
-        choices= CATEGORY # choicesオプション https://arc.net/l/quote/lehwmztf
+        choices= CATEGORY # choicesオプション。デフォルトのフォームがセレクトボックするになる。バリデーションもきく。 https://arc.net/l/quote/lehwmztf
     )
 
-    def __str__(self): # 管理画面でオブジェクトをtitleの文字列で表示する
+    def __str__(self): # 管理画面でオブジェクトをtitleの文字列で表示する。__str__はDjangoのメソッドでこれをモデルに定義すると、このオブジェクトをどう表示するかを定義できる。
         return self.title
 
 class Review(models.Model) :
