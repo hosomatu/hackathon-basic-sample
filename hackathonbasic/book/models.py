@@ -15,6 +15,7 @@ class Book(models.Model):
         max_length=100,
         choices= CATEGORY # choicesオプション。デフォルトのフォームがセレクトボックするになる。バリデーションもきく。 https://arc.net/l/quote/lehwmztf
     )
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE) # 第一引数は関連するモデル。元々のauth.Userモデルを使用。
 
     def __str__(self): # 管理画面でオブジェクトをtitleの文字列で表示する。__str__はDjangoのメソッドでこれをモデルに定義すると、このオブジェクトをどう表示するかを定義できる。
         return self.title
