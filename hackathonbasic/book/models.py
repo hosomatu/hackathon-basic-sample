@@ -1,4 +1,5 @@
 # モデル。テーブルの内容をクラスとして定義。
+# ここに定義してから、python3 manage.py makemigrations でマイグレーションファイルが作成される。その後、python3 manage.py migrateで実際のDBにマイグレートされる。
 from django.db import models
 from . consts import MAX_RATE
 
@@ -9,6 +10,7 @@ RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)] # [(0,'0'),(1,'1'),
 class Book(models.Model):
     title = models.CharField(max_length=100) # titleという名前のCharField(文字列型)のテーブルを定義。
     text = models.TextField(max_length=255)
+    thumbnail = models.ImageField(null=True, blank=True) # Pillowライブラリが必要。nullはDBの話、blankはフォームの話、基本的にnull許容するときはblankも許容する。画像の保存場所はsettings.pyを確認する
     category = models.TextField(
         max_length=100,
         choices= CATEGORY # choicesオプション。デフォルトのフォームがセレクトボックするになる。バリデーションもきく。 https://arc.net/l/quote/lehwmztf

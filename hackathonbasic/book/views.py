@@ -18,7 +18,7 @@ class DetailBookView(DetailView) :
 class CreateBookView(CreateView) :
     template_name = 'book/book_create.html'
     model = Book
-    fields = ('title', 'text', 'category')
+    fields = ('title', 'text', 'category', 'thumbnail') # フォームの内容
     success_url = reverse_lazy('list-book') # reverce逆の動作。つまり普段はurlからviewsの名前を得ているがそれの逆(viewの名前からurlを得る)を行う。lazyによりDjangoの初期化のタイミングで処理が走らないように送らせている。
 
 class DeleteBookView(DeleteView) :
@@ -28,7 +28,7 @@ class DeleteBookView(DeleteView) :
 
 class UpdateBookView(UpdateView) :
     model = Book
-    fields = ('title', 'text', 'category' )
+    fields = ('title', 'text', 'category', 'thumbnail')
     template_name = 'book/book_update.html'
     success_url = reverse_lazy('list-book')
 

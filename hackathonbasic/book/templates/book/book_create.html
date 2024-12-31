@@ -3,7 +3,8 @@
 {% block title %}書籍作成{% endblock %}
 
 {% block content %}
-    <form method='POST' style='text-align: left;'> {% csrf_token %}
+    <!-- enctypeとはHTMLでフォームがデータがサーバーに送信される際のエンコーディング形式を定めるもの。ファイルをアップロードする際にこんな感じにする -->
+    <form method='POST' enctype="multipart/form-data" class="p-4 m-4 bg-light border border-success rounded form-group"> {% csrf_token %}
         {{form.as_p}}  <!-- モデルのフォーム情報に基づいた入力フォームがpタグに挟まる形になる -->
         <input type='submit' value='作成する'>
     </form>

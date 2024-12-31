@@ -15,6 +15,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -28,3 +30,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')), #認証機能appをこのプロジェクトに追加
     path('', include('book.urls')), # book/urls.py内で定義されたパスがこのプロジェクトに追加される。
 ]
+
+# デプロイ時には使われないためあえて外して記載している。
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # 画像表示のためのルーティング。staticという関数によって、requestされたURLと第一引数のMEDIA_URLが同じならその画像を返す。document_rootは画像の保存場所
