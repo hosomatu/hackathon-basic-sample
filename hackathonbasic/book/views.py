@@ -9,10 +9,13 @@ from .models import Book, Review
 from django.contrib.auth.mixins import LoginRequiredMixin # DjangoのMixinは、Djangoのクラスベースビュー（CBV）やモデルでコードの再利用性を高めるための設計パターン
 from django.core.exceptions import PermissionDenied
 from django.db.models import Avg
+from django.core.paginator import Paginator
+from .consts import ITEM_PER_PAGE #const.pyにて定めた定数
 
 class ListBookView(LoginRequiredMixin, ListView) : #Pythonでは()の部分が継承する親クラス。LoginRequiredMixinによってログインしていない状態では表示しないようになる。ログインしていない場合はデフォルトでaccounts/loginに飛ばされる(settings.pyのLOGIN_URLで調整可能)
     template_name = 'book/book_list.html' # テンプレートのパスを指定
     model = Book # 使用するモデルの指定
+    paginate_by = ITEM_PER_PAGE # class-based view の場合は簡単にページネーションを実装できる。関数ベースだと結構めんどい(下)
 
 class DetailBookView(LoginRequiredMixin, DetailView) :
     template_name = 'book/book_detail.html'
@@ -59,13 +62,17 @@ def index_view(request) :
     object_list = Book.objects.order_by('-id')
     ranking_list = Book.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating') # annotateはクエリセット(DBからもらえるオブジェクト)に別の計算結果を追加するメソッド。reviewモデルのrateフィールド
 
+    paginator = Paginator(ranking_list, ITEM_PER_PAGE) # Djangoが用意しているPaginatorクラスからオブジェクトを作成。関数ベースだと大変
+    page_number = request.GET.get('page', 1) # http://example.com/books/?page=3 のときは3を返す。pageに何もなかったら1が帰る
+    page_obj = paginator.page(page_number) #つまり、ランキングリスト全体を分割してオブジェクトとしている
+
     # renderメソッド。テンプレートをレンダリングしてレスポンスオブジェクトを作る関数。
     # 第一引数のrequestは現在のリクエストオブジェクトを指定。第二引数でテンプレートファイルを指定。
     # 第三引数でテンプレートに渡すコンテキスト（辞書形式のデータ)先に定義したobject_list(右)を'object_list'(左)という名前で呼び出せるようにしている
     return render(
         request,
         'book/index.html',
-        {'object_list': object_list, 'ranking_list': ranking_list} # コンテキストとして変数を渡している。
+        {'object_list': object_list, 'ranking_list': ranking_list, 'page_obj': page_obj} # コンテキスト(辞書型でテンプレートに対して渡すやつ)として変数を渡している。
         )
 
 class CreateReview(LoginRequiredMixin, CreateView) :
