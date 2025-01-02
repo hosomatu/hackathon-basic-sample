@@ -27,6 +27,11 @@ class CreateBookView(LoginRequiredMixin, CreateView) :
     fields = ('title', 'text', 'category', 'thumbnail') # フォームの内容
     success_url = reverse_lazy('list-book') # reverce逆の動作。つまり普段はurlからviewsの名前を得ているがそれの逆(viewの名前からurlを得る)を行う。lazyによりDjangoの初期化のタイミングで処理が走らないように送らせている。
 
+    def form_valid(self, form): # 元々CreateViewに定義されているform_validをオーバーライド
+        # ログインしているユーザーをBookインスタンスのuserフィールドに設定
+        form.instance.user = self.request.user # form.instance は保存前の Book オブジェクトのこと
+        return super().form_valid(form) # 親クラスの form_valid メソッドが実行されます。この処理でフォームの内容がデータベースに保存されます。
+
 class DeleteBookView(LoginRequiredMixin, DeleteView) :
     template_name = 'book/book_confirm_delete.html'
     model = Book
