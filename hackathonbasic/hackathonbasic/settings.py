@@ -1,4 +1,5 @@
 # プロジェクト全体の設定ファイル。DBの設定もここ
+# アプリの追加をしたときはここに追加していく。
 """
 Django settings for hackathonbasic project.
 
@@ -14,7 +15,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent # manage.pyが入っているディレクトリになっている
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig', #accountsアプリをプロジェクト全体に認知させる
+    'book.apps.BookConfig', # bookアプリをプロジェクト全体に認知させる
 ]
 
 MIDDLEWARE = [
@@ -52,10 +55,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'hackathonbasic.urls'
 
+# テンプレートエンジンに関する設定を行うリスト
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], # DIRSはテンプレートファイルを検索するディレクトリのリストを指定。BASE_DIRはsettings.pyにて、manage.pyがあるディレクトリと指定されている。Pythonのpathlibモジュールを使うことで、OSに依存しない方法でパスを構築している。BASE_DIR/templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,7 +124,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media' #開発時はここに画像を配置する。
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'

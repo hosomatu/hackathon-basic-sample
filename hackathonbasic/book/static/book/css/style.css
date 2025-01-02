@@ -1,0 +1,11 @@
+a { 
+    text-decoration: none; /* 下線を消す */
+    font-weight: bold; /* 太字にする */
+    font-size: 1.2em; /* サイズを少し大きくする */
+    color: #333; /* 色を濃いグレーにする（目立たせるために調整可能） */
+}
+
+a:hover {
+    color: #007bff; /* ホバー時に色を変更して強調する */
+    text-decoration: underline; /* ホバー時に下線を追加する */
+}

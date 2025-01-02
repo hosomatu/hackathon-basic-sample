@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}本棚アプリ{% endblock %}
+{% block h1 %}本棚アプリ{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-9">
+	<!-- object_listはListViewを使用しているときに提供されるコンテキスト変数。モデルの全データが渡される -->
+	{% for item in object_list %} 
+		<div class="p-4 m-4 bg-light border border-success rounded" style="text-align: left;">
+			<h2 class="text-success">{{ item.title }}</h2>
+			{% if item.thumbnail %}
+				<img src="{{ item.thumbnail.url }}" class="img-thumbnail" /> <!-- ファイルがMEDIA_ROOT以下に保存されているとき、TextFieldクラスのurlプロパティによって、そのファイルにアクセスすることができる。 -->
+			{% else %}
+				<img src="/media/no.jpeg" alt="デフォルト画像" />
+			{% endif %}
+			<h6>{{ item.category }}</h6>
+			<div class="mt-3">
+				<!-- 詳細へのリンク。urlの名前を使用している -->
+				<a href="{% url 'detail-book' item.pk %}">詳細へ</a>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	<dic class="col-3">
+		<h2>評価順TOP2</h2>
+		{% for ranking_book in page_obj %}
+			<div class="p-4 m-4 bg-light border border-success rounded">
+				<h3 class="text-success h5">{{ ranking_book.title }}</h3>
+				<img src="{{ ranking_book.thumbnail.url }}" class="img-thumbnail" />
+				<h6>評価：{{ ranking_book.avg_rating|floatformat:2 }}店</h6> <!-- 小数点一桁で表示させる -->
+				<a href="{% url 'detail-book' ranking_book.id %}">詳細をみる</a>
+			</div>
+		{% endfor %}
+		{% include 'book/components/pagination.html' %} <!-- 別で定めたpagination.htmlを埋め込む -->
+	</div>
+</div>
+{% endblock content %}
