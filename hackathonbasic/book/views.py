@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from .models import Book, Review
 from django.contrib.auth.mixins import LoginRequiredMixin # DjangoのMixinは、Djangoのクラスベースビュー（CBV）やモデルでコードの再利用性を高めるための設計パターン
 from django.core.exceptions import PermissionDenied
+from django.db.models import Avg
 
 class ListBookView(LoginRequiredMixin, ListView) : #Pythonでは()の部分が継承する親クラス。LoginRequiredMixinによってログインしていない状態では表示しないようになる。ログインしていない場合はデフォルトでaccounts/loginに飛ばされる(settings.pyのLOGIN_URLで調整可能)
     template_name = 'book/book_list.html' # テンプレートのパスを指定
@@ -27,7 +28,7 @@ class DeleteBookView(LoginRequiredMixin, DeleteView) :
     template_name = 'book/book_confirm_delete.html'
     model = Book
     success_url = reverse_lazy('list-book')
-    
+
     def get_object(self, queryset=None) :
         obj = super().get_object(queryset) #親クラスのget_objectメソッドでBookインスタンスを取得。queryset はデータベースから取得するデータの集合。urlに対応したオブジェクトをとってくる。
 
@@ -54,12 +55,18 @@ class UpdateBookView(LoginRequiredMixin, UpdateView) :
         return reverse('detail-book', kwargs={'pk': self.object.id}) # reverseによって、URLの名前からURLを生成する。pkというプレースホルダーにこのインスタンスのobjectのidを格納。urls.pyのdetail-bookのパスでpkというプレースホルダーがある部分で使われる。
 
 def index_view(request) :
-    object_list = Book.objects.order_by('category')
+    # テンプレートの中で使用する変数
+    object_list = Book.objects.order_by('-id')
+    ranking_list = Book.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating') # annotateはクエリセット(DBからもらえるオブジェクト)に別の計算結果を追加するメソッド。reviewモデルのrateフィールド
 
     # renderメソッド。テンプレートをレンダリングしてレスポンスオブジェクトを作る関数。
     # 第一引数のrequestは現在のリクエストオブジェクトを指定。第二引数でテンプレートファイルを指定。
     # 第三引数でテンプレートに渡すコンテキスト（辞書形式のデータ)先に定義したobject_list(右)を'object_list'(左)という名前で呼び出せるようにしている
-    return render(request, 'book/index.html', {'object_list': object_list})
+    return render(
+        request,
+        'book/index.html',
+        {'object_list': object_list, 'ranking_list': ranking_list} # コンテキストとして変数を渡している。
+        )
 
 class CreateReview(LoginRequiredMixin, CreateView) :
     model = Review
