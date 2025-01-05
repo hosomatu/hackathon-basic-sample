@@ -17,6 +17,7 @@ services:
       - DB_PASSWORD
       - DB_HOST
       - DB_PORT
+      - DJANGO_SECRET_KEY
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
 
   nginx:
