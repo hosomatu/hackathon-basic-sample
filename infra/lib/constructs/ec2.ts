@@ -5,6 +5,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 interface Ec2Props {
   vpc: ec2.Vpc;
   rdsSecurityGroup: ec2.SecurityGroup;
+  secretArn: string | undefined;
 }
 
 export class Ec2 extends Construct {
@@ -14,7 +15,7 @@ export class Ec2 extends Construct {
   constructor(scope: Construct, id: string, props: Ec2Props) {
     super(scope, id);
 
-    const { vpc, rdsSecurityGroup } = props;
+    const { vpc, rdsSecurityGroup, secretArn } = props;
 
     // セキュリティグループ。RDSとの通信を許可
     const ec2SecurityGroup = new ec2.SecurityGroup(this, "Ec2SecurityGroup", {
@@ -32,6 +33,12 @@ export class Ec2 extends Construct {
       "RDS to EC2"
     );
 
+    // RDSのsecretを使用するポリシー
+    const secretPolicy = new iam.PolicyStatement({
+      actions: ["secretsmanager:GetSecretValue"],
+      resources: [secretArn || ""],
+    });
+
     // Session Manager用のIAMロール
     const ec2role = new iam.Role(this, "Ec2Role", {
       assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
@@ -39,6 +46,7 @@ export class Ec2 extends Construct {
     ec2role.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
     );
+    ec2role.addToPolicy(secretPolicy);
 
     vpc.addInterfaceEndpoint("SSMEndpoint", {
       service: new ec2.InterfaceVpcEndpointAwsService("ssm"),

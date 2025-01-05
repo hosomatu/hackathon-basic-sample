@@ -11,6 +11,7 @@ interface RdsProps {
 export class Rds extends Construct {
   readonly databaseInstance: rds.DatabaseInstance;
   readonly rdsSecurityGroup: ec2.SecurityGroup;
+  readonly secretArn: string | undefined;
 
   constructor(
     scope: Construct,
@@ -47,7 +48,10 @@ export class Rds extends Construct {
       databaseName: `hackathonSampleRDS${envName}`,
       credentials: rds.Credentials.fromGeneratedSecret("admin"), // SecretsManagerが自動生成される
     });
+    const secretArn = databaseInstance.secret?.secretArn;
+
     this.databaseInstance = databaseInstance;
     this.rdsSecurityGroup = rdsSecurityGroup;
+    this.secretArn = secretArn;
   }
 }
