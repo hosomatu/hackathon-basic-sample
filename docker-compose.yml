@@ -11,4 +11,10 @@ services:
     ports: # ポートマッピング。ローカルの8000番ポートとコンテナの8000番ポートを接続(コンテナないで起動したアプリにhttp://localhost:8000 でアクセスできるようになる)
       - "8000:8000"
     working_dir: /code
+    environment: # SessionManagerにて手動でEC2に環境変数を設定したものをコンテナにも設定
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+      - DB_HOST
+      - DB_PORT
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
