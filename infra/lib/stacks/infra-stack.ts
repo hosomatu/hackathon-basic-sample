@@ -26,9 +26,10 @@ export class InfraStack extends cdk.Stack {
     // RDS
     const rds = new Rds(this, 'Rds', {vpc, envName});
     const rdsSecurityGroup = rds.rdsSecurityGroup;
+    const secretArn = rds.secretArn;
 
     // EC2
-    const ec2 = new Ec2(this, 'EC2', {vpc, rdsSecurityGroup})
+    const ec2 = new Ec2(this, 'EC2', {vpc, rdsSecurityGroup, secretArn});
     const ec2Instance = ec2.instance;
     const ec2SecurityGroup = ec2.securityGroup;
 
