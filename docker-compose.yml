@@ -8,8 +8,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./hackathonbasic:/code
-    ports: # ポートマッピング。ローカルの8000番ポートとコンテナの8000番ポートを接続(コンテナないで起動したアプリにhttp://localhost:8000 でアクセスできるようになる)
-      - "8000:8000"
+    ports: # 内部通信用ポート
+      - "8000"
     working_dir: /code
     environment: # SessionManagerにて手動でEC2に環境変数を設定したものをコンテナにも設定
       - DB_NAME
@@ -18,3 +18,13 @@ services:
       - DB_HOST
       - DB_PORT
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80" # 外部からアクセスする80番ポートを公開
+    volumes: # ローカルのnginx.confをコンテナ内のnginx.confにマウント
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app

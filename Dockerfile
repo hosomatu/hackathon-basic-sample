@@ -5,9 +5,13 @@ FROM python:3.8-slim
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
+    pkg-config \ 
+    default-libmysqlclient-dev \
+    gcc \ 
+    build-essential \ 
     && rm -rf /var/lib/apt/lists/*
 
-# 作業ディレクトリを設定。以降のコマンドはappを基準に実行される
+# 作業ディレクトリを設定
 WORKDIR /code
 
 # Python仮想環境のセットアップ
@@ -20,5 +24,8 @@ ENV PATH="/venv/bin:$PATH"
 COPY ./requirements.txt /code/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# ローカルのルートディレクトリにあるhackathonbasicディレクトリをコンテナ内のcodeディレクトリにコピー。code配下にmanage.pyが配置されることになる
+# MySQL用のPythonパッケージをインストール
+RUN pip install mysqlclient
+
+# アプリケーションコードをコピー
 COPY ./hackathonbasic /code/
