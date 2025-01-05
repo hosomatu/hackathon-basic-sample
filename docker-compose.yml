@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: Django
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./hackathonbasic:/code
+    ports: # ポートマッピング。ローカルの8000番ポートとコンテナの8000番ポートを接続(コンテナないで起動したアプリにhttp://localhost:8000 でアクセスできるようになる)
+      - "8000:8000"
+    working_dir: /code
+    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
