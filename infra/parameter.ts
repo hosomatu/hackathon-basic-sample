@@ -10,8 +10,10 @@ export const DefaultRegion: Region = {
 export interface StackParameter {
   envName: EnvName;
   vpcCidr: string;
+  domainName: string;
 }
 export const DevStackParameter: StackParameter = {
   envName: 'dev',
   vpcCidr: "10.1.0.0/16",
+  domainName: 'hogehoge.com'
 };

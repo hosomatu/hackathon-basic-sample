@@ -5,6 +5,7 @@ import { Vpc } from '../constructs/vpc';
 import { Rds } from '../constructs/rds';
 import { Ec2 } from '../constructs/ec2';
 import { Alb } from '../constructs/alb';
+import { Route53AndAcm } from '../constructs/route53_acm';
 
 export class InfraStack extends cdk.Stack {
   constructor(
@@ -16,7 +17,7 @@ export class InfraStack extends cdk.Stack {
     ) {
     super(scope, id, props);
 
-    const { envName, vpcCidr } = props.config;
+    const { envName, vpcCidr, domainName } = props.config;
 
     // VPC
     const vpcResources = new Vpc (this, 'VpcResources', {vpcCidr,envName});
@@ -33,5 +34,8 @@ export class InfraStack extends cdk.Stack {
 
     // ALB
     const alb = new Alb(this, 'Alb', {vpc, ec2Instance, ec2SecurityGroup});
+
+    // Route53、ACM
+    // new Route53AndAcm(this, 'Route53andACM', {domainName, alb})
   }
 }
